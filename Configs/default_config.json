@@ -1,0 +1,6 @@
+{
+	"Before": "your_full_path_to_folder_target_1",
+	"After": "your_full_path_to_folder_target_2",
+	"Version": "99.3.14",
+	"IsMissingFilesMode": false
+}
