@@ -2,8 +2,8 @@
  * Author: Nikolay Dvurechensky
  * Site: https://dvurechensky.pro/
  * Gmail: dvurechenskysoft@gmail.com
- * Last Updated: 07 апреля 2026 10:57:37
- * Version: 1.0.11
+ * Last Updated: 08 апреля 2026 14:28:35
+ * Version: 1.0.12
  */
 
 namespace LizeriumFindChanges.Components
