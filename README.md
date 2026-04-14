@@ -18,81 +18,93 @@
 </p>
 
 <p align="center">
-  <b>Lizerium Find Changes</b> — консольный инструмент для сравнения двух версий файловой структуры,
-  формирования списка изменений и подготовки готовой папки обновления.
+  <b>Lizerium Find Changes</b> — a console tool for comparing two versions of a file structure,
+  generating a change list, and preparing a ready-to-deploy update folder.
 </p>
+
+<div align="center" style="margin: 20px 0; padding: 10px; background: #1c1917; border-radius: 10px;">
+  <strong>🌐 Language: </strong>
+  
+  <a href="./README.ru.md" style="color: #F5F752; margin: 0 10px;">
+    🇷🇺 Russian
+  </a>
+  | 
+  <span style="color: #0891b2; margin: 0 10px;">
+    ✅ 🇺🇸 English (current)
+  </span>
+</div>
 
 ---
 
 > [!NOTE]
-> Этот проект является частью экосистемы **Lizerium** и относится к направлению:
+> This project is part of the **Lizerium** ecosystem and belongs to the following direction:
 >
-> * [`Lizerium.Tools.Structs`](https://github.com/Lizerium/Lizerium.Tools.Structs)
+> - [`Lizerium.Tools.Structs`](https://github.com/Lizerium/Lizerium.Tools.Structs)
 >
-> Если вы ищете связанные инженерные и вспомогательные инструменты, начните оттуда.
+> If you are looking for related engineering and supporting tools, start there.
 
-# Оглавление
+# Table of Contents
 
-- [Оглавление](#оглавление)
-  - [Общее](#общее)
-  - [Возможности](#возможности)
-  - [Технологии](#технологии)
-  - [Как это работает](#как-это-работает)
-  - [Структура конфигурации](#структура-конфигурации)
-    - [Пример `config.json`](#пример-configjson)
-    - [Параметры](#параметры)
-  - [Режимы работы](#режимы-работы)
-  - [1. Режим генерации обновления](#1-режим-генерации-обновления)
-    - [Выход:](#выход)
-  - [2. Режим извлечения отсутствующих файлов](#2-режим-извлечения-отсутствующих-файлов)
-  - [Структура выходных данных](#структура-выходных-данных)
+- [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Technologies](#technologies)
+  - [How It Works](#how-it-works)
+  - [Configuration Structure](#configuration-structure)
+    - [Example `config.json`](#example-configjson)
+    - [Parameters](#parameters)
+  - [Modes](#modes)
+    - [1. Update Generation Mode](#1-update-generation-mode)
+      - [Output:](#output)
+    - [2. Missing Files Extraction Mode](#2-missing-files-extraction-mode)
+  - [Output Structure](#output-structure)
     - [`manifest.json`](#manifestjson)
-    - [Папка обновления](#папка-обновления)
-    - [Папка отсутствующих файлов](#папка-отсутствующих-файлов)
-  - [Пример сценария использования](#пример-сценария-использования)
-    - [Исходные данные](#исходные-данные)
-    - [Конфиг](#конфиг)
-    - [Результат](#результат)
-  - [Другое](#другое)
+    - [Update Folder](#update-folder)
+    - [Missing Files Folder](#missing-files-folder)
+  - [Example Scenario](#example-scenario)
+    - [Input](#input)
+    - [Config](#config)
+    - [Result](#result)
+  - [Other](#other)
   - [Author](#author)
 
 ---
 
-## Общее
+## Overview
 
 > [!IMPORTANT]
-> Цель проекта — автоматически определить разницу между двумя версиями файловой структуры и подготовить содержимое обновления.
+> The goal of this project is to automatically detect differences between two versions of a file structure and prepare update content.
 
-Инструмент сравнивает:
+The tool compares:
 
-- папки
-- файлы
-- новые элементы
-- удалённые элементы
-- изменённые файлы
-- перемещённые / переиспользованные файлы
+- directories
+- files
+- new items
+- deleted items
+- modified files
+- moved / reused files
 
-После анализа он может:
+After analysis, it can:
 
-- сформировать `manifest.json`
-- собрать папку обновления только из нужных файлов
-- отдельно извлечь файлы, отсутствующие в новой версии
-
----
-
-## Возможности
-
-- 📁 Сравнение двух директорий
-- 📄 Поиск новых, удалённых и изменённых файлов
-- 🔁 Определение файлов, которые были перенесены или повторно использованы
-- 🏗 Формирование готовой папки обновления
-- 📜 Генерация `manifest.json`
-- 🧩 Извлечение файлов, которые отсутствуют в новой версии
-- ⚡ Простая конфигурация через `config.json`
+- generate a `manifest.json`
+- build an update folder with only required files
+- extract files missing from the new version
 
 ---
 
-## Технологии
+## Features
+
+- 📁 Directory comparison
+- 📄 Detection of new, deleted, and modified files
+- 🔁 Identification of moved or reused files
+- 🏗 Generation of ready-to-use update folder
+- 📜 `manifest.json` generation
+- 🧩 Extraction of files missing in the new version
+- ⚡ Simple configuration via `config.json`
+
+---
+
+## Technologies
 
 - C#
 - .NET
@@ -101,40 +113,40 @@
 
 ---
 
-## Как это работает
+## How It Works
 
-Программа использует две директории:
+The program uses two directories:
 
-- `Before` — предыдущая версия
-- `After` — новая версия
+- `Before` — previous version
+- `After` — new version
 
-На основе сравнения она определяет:
+It determines:
 
-- какие папки были добавлены
-- какие папки были удалены
-- какие файлы были изменены
-- какие файлы появились впервые
-- какие файлы были удалены
-- какие файлы совпадают по содержимому, но имеют другой путь (`Retranslate`)
+- added folders
+- removed folders
+- changed files
+- newly created files
+- deleted files
+- files with identical content but different paths (`Retranslate`)
 
-После этого формируется:
+Then it generates:
 
-- `manifest.json` со списком изменений
-- папка обновления с нужной структурой файлов
+- a `manifest.json` with all changes
+- an update folder with the correct structure
 
 ---
 
-## Структура конфигурации
+## Configuration Structure
 
-Программа использует файл:
+The program uses:
 
 ```text
 config.json
 ```
 
-Если его нет — он будет создан автоматически.
+If it does not exist, it will be created automatically.
 
-### Пример `config.json`
+### Example `config.json`
 
 ```json
 {
@@ -145,38 +157,38 @@ config.json
 }
 ```
 
-- [Пример](Configs/default_config.json)
+- [Example](Configs/default_config.json)
 
-### Параметры
+### Parameters
 
-- `Before` — путь до предыдущей версии
-- `After` — путь до новой версии
-- `Version` — имя выходной папки обновления
-- `IsMissingFilesMode` — переключение режима работы
+- `Before` — path to previous version
+- `After` — path to new version
+- `Version` — output update folder name
+- `IsMissingFilesMode` — mode switch
 
 ---
 
-## Режимы работы
+## Modes
 
-## 1. Режим генерации обновления
+### 1. Update Generation Mode
 
-Если:
+If:
 
 ```json
 "IsMissingFilesMode": false
 ```
 
-то программа:
+The program:
 
-1. Сравнивает `Before` и `After`
-2. Формирует `manifest.json`
-3. Создаёт папку обновления с именем из поля `Version`
-4. Копирует в неё только необходимые изменённые / новые / переиспользуемые файлы
+1. Compares `Before` and `After`
+2. Generates `manifest.json`
+3. Creates an update folder using `Version`
+4. Copies only required changed / new / reused files
 
-### Выход:
+#### Output:
 
 - `manifest.json`
-- папка обновления, например:
+- update folder, e.g.:
 
 ```text
 99.3.12/
@@ -184,42 +196,40 @@ config.json
 
 ---
 
-## 2. Режим извлечения отсутствующих файлов
+### 2. Missing Files Extraction Mode
 
-Если:
+If:
 
 ```json
 "IsMissingFilesMode": true
 ```
 
-то программа:
+The program:
 
-1. Сравнивает `Before` и `After`
-2. Ищет файлы, которые были в старой версии, но отсутствуют в новой
-3. Копирует их в отдельную папку:
+1. Compares `Before` and `After`
+2. Finds files present in old version but missing in new
+3. Copies them into:
 
 ```text
 MISSING/
 ```
 
-Этот режим полезен для:
+Useful for:
 
-- анализа потерь файлов
-- проверки неполных сборок
-- восстановления содержимого
-- ручной инспекции изменений
+- file loss analysis
+- incomplete build detection
+- recovery
+- manual inspection
 
 ---
 
-## Структура выходных данных
-
-После запуска могут быть сформированы следующие данные:
+## Output Structure
 
 ### `manifest.json`
 
-Содержит список изменений между двумя версиями.
+Contains a list of changes.
 
-Примеры типов изменений:
+Change types:
 
 - `Added`
 - `Deleted`
@@ -227,19 +237,23 @@ MISSING/
 - `Unchanged`
 - `Retranslate`
 
-### Папка обновления
+---
 
-Например:
+### Update Folder
+
+Example:
 
 ```text
 99.3.12/
 ```
 
-Внутри неё будет лежать только то, что действительно должно быть доставлено как обновление.
+Contains only files required for deployment.
 
-### Папка отсутствующих файлов
+---
 
-Если активирован режим извлечения отсутствующих файлов:
+### Missing Files Folder
+
+If enabled:
 
 ```text
 MISSING/
@@ -247,16 +261,16 @@ MISSING/
 
 ---
 
-## Пример сценария использования
+## Example Scenario
 
-### Исходные данные
+### Input
 
 ```text
 C:\Builds\Freelancer_99.3.11
 C:\Builds\Freelancer_99.3.12
 ```
 
-### Конфиг
+### Config
 
 ```json
 {
@@ -267,26 +281,24 @@ C:\Builds\Freelancer_99.3.12
 }
 ```
 
-### Результат
-
-После запуска будут получены:
+### Result
 
 ```text
 manifest.json
 99.3.12/
 ```
 
-Эти данные можно использовать для дальнейшей упаковки и публикации обновления, например в экосистеме **Lizerium Launcher**.
+These can be used for packaging and deployment (e.g., in **Lizerium Launcher**).
 
 ---
 
-## Другое
+## Other
 
 > [!TIP]
-> Проект используется как часть пайплайна подготовки обновлений в экосистеме **Lizerium**.
+> Used as part of the update preparation pipeline in the **Lizerium** ecosystem.
 
 > [!IMPORTANT]
-> Для корректного результата рекомендуется сравнивать уже подготовленные и финальные сборки, а не промежуточные рабочие директории.
+> For accurate results, compare finalized builds, not intermediate working directories.
 
 ---
 
@@ -297,5 +309,3 @@ Part of the **Lizerium** ecosystem
 
 - Website: [https://dvurechensky.pro](https://dvurechensky.pro)
 - GitHub: [https://github.com/Dvurechensky](https://github.com/Dvurechensky)
-
----
